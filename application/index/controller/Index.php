@@ -13,7 +13,12 @@ class Index extends Frontend
 
     public function index()
     {
-        return $this->view->fetch();
+        exit('禁止访问');
+    }
+
+    public function news()
+    {
+        exit('禁止访问');
     }
 
 }
