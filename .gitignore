@@ -12,7 +12,6 @@ composer.lock
 *.log
 *.css.map
 !.gitkeep
-.env
 .svn
 .vscode
 node_modules
