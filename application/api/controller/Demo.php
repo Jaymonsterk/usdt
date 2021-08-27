@@ -6,6 +6,7 @@ use app\common\controller\Api;
 
 /**
  * 示例接口
+ * @ApiInternal
  */
 class Demo extends Api
 {

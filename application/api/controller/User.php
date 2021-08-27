@@ -61,6 +61,7 @@ class User extends Api
     /**
      * 手机验证码登录
      *
+     * @ApiInternal
      * @ApiMethod (POST)
      * @param string $mobile  手机号
      * @param string $captcha 验证码
@@ -258,6 +259,7 @@ class User extends Api
     /**
      * 第三方登录
      *
+     * @ApiInternal
      * @ApiMethod (POST)
      * @param string $platform 平台名称
      * @param string $code     Code码

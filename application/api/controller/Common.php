@@ -22,6 +22,7 @@ class Common extends Api
     /**
      * 加载初始化
      *
+     * @ApiInternal
      * @param string $version 版本号
      * @param string $lng     经度
      * @param string $lat     纬度

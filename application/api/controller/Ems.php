@@ -8,6 +8,7 @@ use app\common\model\User;
 
 /**
  * 邮箱验证码接口
+ * @ApiInternal
  */
 class Ems extends Api
 {
