@@ -2,7 +2,11 @@
 
 return [
     'autoload' => false,
-    'hooks' => [],
+    'hooks' => [
+        'app_init' => [
+            'log',
+        ],
+    ],
     'route' => [],
     'priority' => [],
     'domain' => '',
