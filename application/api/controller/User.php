@@ -343,4 +343,69 @@ class User extends Api
             $this->error($this->auth->getError());
         }
     }
+
+	/**
+	 * 获取邀请信息
+	 */
+	public function get_invite_info() {
+
+		$user = $this->auth->getUser();
+		$uid = 0;
+		if ($user) {
+			$uid = $user->toArray()['id'];
+		} else {
+			$this->error(__('未登录'));
+		}
+
+		$share_info = \app\chainex\logic\User::getInstance()->getHaiBao($uid);
+		$data = \app\chainex\logic\User::getInstance()->getInviteInfo($uid);
+		$data['invite_award_msg'] = BaseConfig::getInstance()->getBaseConfig('invite_award_msg');
+		$bg = Db::name('ads')->where('type','=','3')->value('image');
+		$bg = Url::build($bg,'',false,true);
+
+		$this->success(__('OK'),[
+			'img' => $share_info['haibao_url'],
+			'link' => $share_info['link'],
+			'title' => $share_info['title'],
+			'invite_qrcode' => $data['invite_qrcode'],
+			'invite_url' => $data['invite_url'],
+			'invite_award_msg' => $data['invite_award_msg'],
+			'bg' => $bg
+		]);
+	}
+
+	/*
+	 * 获取邀请列表
+	 */
+	public function get_invite_list() {
+		$user = $this->auth->getUser();
+		$uid = 0;
+		if ($user) {
+			$uid = $user->toArray()['id'];
+		}
+
+		$page_rows = 10;
+
+		$data = \app\api\logic\User::getInstance()->getInviteList($uid,$page_rows);
+
+		$data = $data->toArray();
+
+		//获取邀请总数
+		$invite_num = \app\api\logic\User::getInstance()->getInviteNum($uid);
+
+		//查询邀请总奖励
+		//$invite_award = \app\api\logic\Usermoney::getInstance()->getInviteAwardTotal($uid);
+
+		$data['invite_num'] = $invite_num;
+		$data['invite_award'] = 0;
+
+		//格式化数据
+		foreach ($data['data'] as $k => &$v) {
+			$v['tran_num'] = \app\api\logic\Tran::getInstance()->getUserCompleteTranNum($v['uid']);
+			$v['expensess'] = 1;
+		}
+
+		$this->success(__('OK'),$data);
+
+	}
 }
