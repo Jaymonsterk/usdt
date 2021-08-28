@@ -13,7 +13,8 @@ use think\Log;
 use think\Url;
 
 /**
- * 用户提现银行卡管理
+ * 用户提现管理
+ * @ApiInternal
  */
 class Userwithdraw extends Api
 {
