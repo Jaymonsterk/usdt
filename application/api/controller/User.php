@@ -126,7 +126,7 @@ class User extends Api
         }
         $ret = Sms::check($mobile, $code, 'register');
         if (!$ret) {
-            $this->error(__('Captcha is incorrect'));
+            //$this->error(__('Captcha is incorrect'));
         }
         $ret = $this->auth->register($username, $password, $email, $mobile, []);
         if ($ret) {
