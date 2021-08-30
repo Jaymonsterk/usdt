@@ -400,7 +400,7 @@ class User extends Api
 		$this->success(__('OK'),[
 //			'img' => $share_info['haibao_url'],
 //			'link' => $share_info['link'],
-//			'title' => $share_info['title'],
+			'username' => $data['username'],
 			'invite_code' => $user['invite_code'],
 			'invite_url' => $data['invite_url'],
 			'invite_award_msg' => $data['invite_award_msg'],
@@ -439,7 +439,7 @@ class User extends Api
 			$v['expensess'] = 1;
 		}
 
-		$this->success(__('OK'),$data);
+		$this->success(__('Success'),$data);
 
 	}
 
