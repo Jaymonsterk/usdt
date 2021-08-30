@@ -400,7 +400,7 @@ class User extends Api
 		$this->success(__('OK'),[
 //			'img' => $share_info['haibao_url'],
 //			'link' => $share_info['link'],
-			'username' => $data['username'],
+			'username' => $user['username'],
 			'invite_code' => $user['invite_code'],
 			'invite_url' => $data['invite_url'],
 			'invite_award_msg' => $data['invite_award_msg'],
