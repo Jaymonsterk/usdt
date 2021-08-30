@@ -401,7 +401,7 @@ class User extends Api
 //			'img' => $share_info['haibao_url'],
 //			'link' => $share_info['link'],
 //			'title' => $share_info['title'],
-			'invite_qrcode' => $data['invite_qrcode'],
+			'invite_code' => $user['invite_code'],
 			'invite_url' => $data['invite_url'],
 			'invite_award_msg' => $data['invite_award_msg'],
 //			'bg' => $bg
