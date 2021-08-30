@@ -50,7 +50,7 @@ class Usdt extends Api
 	    ];
 
 	    //校验
-	    $validate = new Validate($rule);
+	    $validate = new Validate(request()->param());
 	    $result   = $validate->check($params);
 	    if(!$result){
 		    $this->error($validate->getError());
@@ -227,7 +227,7 @@ class Usdt extends Api
 
 	    //校验
 	    $validate = new Validate($rule);
-	    $result   = $validate->check($params);
+	    $result   = $validate->check(request()->param());
 	    if(!$result){
 		    $this->error($validate->getError());
 	    }
