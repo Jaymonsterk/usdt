@@ -47,7 +47,7 @@ class Usdt extends Api
 	    $result= $this->validate(request()->param(),[
 		    'address'  => 'require|max:64',
 		    'image'   => 'require',
-		    'amount' => 'require:number|min:1',
+		    'amount' => 'require|number|min:1',
 	    ]);
 
 	    if ($result !== true) {
@@ -220,8 +220,8 @@ class Usdt extends Api
 	    $params = $this->request->post("row/a");
 
 	    $result= $this->validate(request()->param(),[
-		    'bank_id'   => 'require:number',
-		    'num' => 'require:number|min:1',
+		    'bank_id'   => 'require|number',
+		    'num' => 'require|number|min:1',
 	    ]);
 
 	    if ($result !== true) {
