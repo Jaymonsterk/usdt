@@ -36,6 +36,35 @@ class OrderCashout extends Backend
      * 因此在当前控制器中可不用编写增删改查的代码,除非需要自己控制这部分逻辑
      * 需要将application/admin/library/traits/Backend.php中对应的方法复制到当前控制器,然后进行修改
      */
-    
 
+    /*
+      * 关闭订单
+      */
+    public function refund($ids)
+    {
+        $row = $this->model->get(['id' => $ids]);
+        if (!$row) {
+            $this->error(__('No Results were found'));
+        }
+        if ($this->request->isAjax()) {
+
+            if ($row['status'] != 1) {
+                //报错
+                $this->error('不是待审核订单，无法关闭');
+            }
+            $data = [
+                'status' => 3,
+                //'note' => $params['note'],
+            ];
+            //状态改为3,关闭订单
+            $row->save($data);
+
+            //TODO 处理余额退回
+
+            $msg = '审核失败退回!';
+
+            $this->success($msg);
+        }
+        $this->error('Error');
+    }
 }

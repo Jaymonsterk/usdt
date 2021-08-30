@@ -29,7 +29,28 @@ class OrderCashout extends Model
         'status_text',
         'opertime_text'
     ];
-    
+
+    protected static function init()
+    {
+        self::beforeInsert(function ($row) {
+            //操作者
+            if (!isset($row['aid']) || !$row['aid']) {
+                $row['aid'] = session('admin.id');
+            }
+            if (!isset($row['aname']) || !$row['aname']) {
+                $row['aname'] = session('admin.username');
+            }
+        });
+
+        self::beforeUpdate(function ($row) {
+            //操作者
+            $row['aid'] = session('admin.id');
+            $row['aname'] = session('admin.username');
+            if($row['status']=="2" || $row['status']=="3"){
+                $row['opertime'] = time();
+            }
+        });
+    }
 
     
     public function getTypeList()

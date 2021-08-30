@@ -6,11 +6,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Table.api.init({
                 extend: {
                     index_url: 'log/money_log/index' + location.search,
-                    add_url: 'log/money_log/add',
-                    edit_url: 'log/money_log/edit',
-                    del_url: 'log/money_log/del',
-                    multi_url: 'log/money_log/multi',
-                    import_url: 'log/money_log/import',
+                    // add_url: 'log/money_log/add',
+                    // edit_url: 'log/money_log/edit',
+                    // del_url: 'log/money_log/del',
+                    // multi_url: 'log/money_log/multi',
+                    // import_url: 'log/money_log/import',
                     table: 'user_money_log',
                 }
             });
@@ -22,6 +22,18 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
                 sortName: 'id',
+                //切换卡片视图和表格视图两种模式
+                showToggle:false,
+                //显示隐藏列可以快速切换字段列的显示和隐藏
+                showColumns:true,
+                //导出整个表的所有行导出整个表的所有行
+                showExport:false,
+                //搜索
+                search: false,
+                //搜索功能，
+                commonSearch: true,
+                //表格上方的搜索搜索指表格上方的搜索
+                searchFormVisible: true,
                 columns: [
                     [
                         {checkbox: true},
@@ -32,7 +44,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'after', title: __('After'), operate:'BETWEEN'},
                         {field: 'memo', title: __('Memo'), operate: 'LIKE'},
                         {field: 'createtime', title: __('Createtime'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        // {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
             });

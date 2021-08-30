@@ -22,6 +22,18 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
                 sortName: 'id',
+                //切换卡片视图和表格视图两种模式
+                showToggle:false,
+                //显示隐藏列可以快速切换字段列的显示和隐藏
+                showColumns:true,
+                //导出整个表的所有行导出整个表的所有行
+                showExport:false,
+                //搜索
+                search: false,
+                //搜索功能，
+                commonSearch: true,
+                //表格上方的搜索搜索指表格上方的搜索
+                searchFormVisible: true,
                 columns: [
                     [
                         {checkbox: true},
@@ -34,11 +46,44 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'status', title: __('Status'), searchList: {"0":__('Status 0'),"1":__('Status 1'),"2":__('Status 2')}, formatter: Table.api.formatter.status},
                         {field: 'note', title: __('Note'), operate: 'LIKE'},
                         {field: 'createtime', title: __('Createtime'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
-                        {field: 'updatetime', title: __('Updatetime'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
+                        // {field: 'updatetime', title: __('Updatetime'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
                         {field: 'opertime', title: __('Opertime'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
-                        {field: 'aid', title: __('Aid')},
-                        {field: 'aname', title: __('Aname'), operate: 'LIKE'},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'aid', title: __('Aid'),visible:false, operate: false},
+                        {field: 'aname', title: __('Aname'), operate: false, visible: false},
+                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter:function(value,row,index) {
+                                var that = $.extend({}, this);
+                                var table = $(this.table).clone(true);
+
+                                if(row.status>0){
+                                    $(table).data("operate-del", null);
+                                }
+                                if(row.status>1){
+                                    $(table).data("operate-edit", null);
+                                }
+
+                                that.table = table;
+                                return Table.api.formatter.operate.call(that, value, row, index);
+                            },
+                            buttons:[
+                                {
+                                    name: 'process',
+                                    title: __('审核未通过'),
+                                    text: __('审核未通过'),
+                                    classname: 'btn btn-xs btn-info btn-ajax',
+                                    icon: 'fa fa-flash',
+                                    url: function (row, j) {
+                                        return 'order/order_cashin/refund/ids/'+row.id;
+                                    },
+                                    refresh:true,
+                                    visible:function (row, j) {
+                                        return row.status == 0;
+                                    },
+                                    hidden:function (row, j) {
+                                        return row.status > 0;
+                                    }
+                                },
+                            ]
+                        }
                     ]
                 ]
             });
