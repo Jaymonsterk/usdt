@@ -5,6 +5,7 @@ namespace app\api\controller;
 use app\common\controller\Api;
 use app\common\library\Sms as Smslib;
 use app\common\model\User;
+use think\Db;
 use think\Hook;
 
 /**
@@ -22,26 +23,9 @@ class Usdt extends Api
      */
     public function buy_info()
     {
-	    //币种 USDT
-	    $tips = "
-	    温馨提示<br>
-• 最小充值金额：1 USDT ，小于最小金额的充值将不会上账且无法退回。<br>
-• 请勿向上述地址充值任何非USDT资产，否则资产将不可找回。<br>
-• 您充值至上述地址后，需要整个网络节点的确认，1次网络确认后到账，3 次网络确认后可提币。<br>
-• 您的充值地址不会经常改变，可以重复充值；如有更改，我们会尽量通过网站公告或邮件通知您。<br>
-• 请务必确认电脑及浏览器安全，防止信息被篡改或泄露。<br>
-";
-	    $address = [
-    		['network'=>'ERC20','address'=>'0x5202eab6062ed76c6f3dac789c7340ad55de4a08','tips'=>$tips],
-    		['network'=>'TRC20','address'=>'0x5202eab6062ed76c6f3dac789c7340ad55de4a08','tips'=>$tips],
-	    ];
-	    $data = [
-	    	'coin_type'=>'USDT',
-		    'from_address'=>'0x5202eab6062ed76c6f3dac789c7340ad55de4a08',//唯一
-		    'to_address'=>$address,
-	    ];
+	    $data = \app\api\logic\Usdt::getInstance()->getBuyInfo();
 
-        if ($data) {
+	    if ($data) {
             $this->success(__('获取充币地址成功'),$data);
         } else {
             $this->error(__('地址配置不正确'));
@@ -53,15 +37,38 @@ class Usdt extends Api
      *
      * @ApiMethod (POST)
      * @param string $status 状态 1=交易中，2=已完成,3=已取消
-     * @param string $my 是否我的交易
      */
     public function buy()
     {
 	    //币种 USDT
-	    $data = [
-    		['id'=>1,'username'=>'user01','status'=>1,'num'=>'1000','rate'=>'6.5','total'=>6500,'type'=>'银行卡'],
-    		['id'=>2,'username'=>'user02','status'=>2,'num'=>'2000','rate'=>'6.5','total'=>13000,'type'=>'银行卡'],
+	    $user = $this->auth->getUserinfo();
+	    $params = $this->request->post("row/a");
+	    $rule = [
+		    'address'  => 'require|max:64',
+		    'image'   => 'require',
+		    'amount' => 'require:number|min:1',
 	    ];
+
+	    //校验
+	    $validate = new Validate($rule);
+	    $result   = $validate->check($params);
+	    if(!$result){
+		    $this->error($validate->getError());
+	    }
+
+	    //余额判断
+	    $balance = \app\api\logic\Usdt::getInstance()->getBalance();
+	    if($balance<$params['amount']){
+		    $this->error(__('余额不足'));
+	    }
+
+	    //获取参数
+	    $time = time();
+	    $params['user_id'] = $user['id'];
+	    $params['username'] = $user['username'];
+	    $params['createtime'] = $time;
+	    $params['updatetime'] = $time;
+	    $data = \app\api\logic\Usdt::getInstance()->Buy($params);
 
         if ($data) {
             $this->success(__('Success'),$data);
@@ -80,10 +87,20 @@ class Usdt extends Api
     public function buy_order_list()
     {
 	    //币种 USDT
-	    $data = [
-    		['id'=>1,'username'=>'user01','status'=>1,'num'=>'1000','rate'=>'6.5','total'=>6500,'type'=>'银行卡'],
-    		['id'=>2,'username'=>'user02','status'=>2,'num'=>'2000','rate'=>'6.5','total'=>13000,'type'=>'银行卡'],
-	    ];
+	    $user = $this->auth->getUserinfo();
+
+	    //条件
+	    $status = $this->request->post("status","");
+	    $my = $this->request->post("my","");
+	    if($status){
+		    $where['status'] = $status;
+	    }
+	    if($my){
+		    $where['user_id'] = $user['id'];
+	    }
+
+	    //获取数据
+	    $data = \app\api\logic\Usdt::getInstance()->getBuyOrderList($where);
 
         if ($data) {
             $this->success(__('Success'),$data);
@@ -93,19 +110,27 @@ class Usdt extends Api
     }
 
     /**
-     * 交易列表
+     * 卖币交易列表
      *
      * @ApiMethod (POST)
      * @param string $status 状态 1=交易中，2=已完成,3=已取消
      * @param string $my 是否我的交易
      */
-    public function list()
+    public function sell_order_list()
     {
 	    //币种 USDT
-	    $data = [
-    		['id'=>1,'username'=>'user01','status'=>1,'num'=>'1000','rate'=>'6.5','total'=>6500,'type'=>'银行卡'],
-    		['id'=>2,'username'=>'user02','status'=>2,'num'=>'2000','rate'=>'6.5','total'=>13000,'type'=>'银行卡'],
-	    ];
+	    $user = $this->auth->getUserinfo();
+
+	    $status = $this->request->post("status","");
+	    $my = $this->request->post("my","");
+
+	    if($status){
+		    $where['status'] = $status;
+	    }
+	    if($my){
+		    $where['user_id'] = $user['id'];
+	    }
+	    $data = \app\api\logic\Usdt::getInstance()->getSellOrderList($where);
 
         if ($data) {
             $this->success(__('Success'),$data);
@@ -120,13 +145,10 @@ class Usdt extends Api
     public function latest_price()
     {
 	    //汇率
-	    $usdt_rate = [
-		    ['platform'=>"火币网",'usdt_rate'=>"6.5"],
-		    ['platform'=>"本站",'usdt_rate'=>"6.55"],
-	    ];
+	    $ret = \app\api\logic\Usdt::getInstance()->getLatestPrice();
 
-	    if ($usdt_rate) {
-		    $this->success(__('Success'),$usdt_rate);
+	    if ($ret) {
+		    $this->success(__('Success'),$ret);
 	    } else {
 		    $this->error(__('Error'));
 	    }
@@ -138,12 +160,20 @@ class Usdt extends Api
 	 * @ApiMethod (POST)
 	 * @param string $status 状态 1=交易中，2=已完成,3=已取消
 	 */
-	public function order()
+	public function my_sell_order()
 	{
 		//币种 USDT
-		$data = [
-			['id'=>1,'username'=>'user01','status'=>1,'num'=>'1000','rate'=>'6.5','total'=>6500,'type'=>'银行卡','createtime'=>time(),'paytime'=>time()],
+		$user = $this->auth->getUserinfo();
+
+		$status = $this->request->post("status","");
+		$where = [
+			"user_id"=>$user['id'],
 		];
+
+		if($status){
+			$where['status'] = $status;
+		}
+		$data = \app\api\logic\Usdt::getInstance()->getSellOrderList($where);
 
 		if ($data) {
 			$this->success(__('Success'),$data);
@@ -158,20 +188,15 @@ class Usdt extends Api
 	public function sell_info()
 	{
 		//币种 USDT
-		$bank_list = [
-			['id'=>'1','bank_name'=>'中国银行','default'=>1,'bank_branch'=>'北京支行','card'=>'622612349876'],
-			['id'=>'2','bank_name'=>'招商银行','default'=>0,'bank_branch'=>'天津支行','card'=>'622600009876'],
-		];
-
-		$usdt_rate = [
-			['platform'=>"火币网",'usdt_rate'=>"6.5"],
-			['platform'=>"本站",'usdt_rate'=>"6.55"],
-		];
+		$user = $this->auth->getUserinfo();
+		$bank_list = Db::name('user_bank_card')->where('uid','=',$user['id'])->select();
+		$usdt_rate = \app\api\logic\Usdt::getInstance()->getLatestPrice();
+		$balance = \app\api\logic\Usdt::getInstance()->getBalance();
 
 		$data = [
 			'bank_list'=>$bank_list,//银行卡信息
 			'usdt_rate'=>$usdt_rate,//汇率
-			'balance'=>'1000.00',//余额
+			'balance'=>$balance,//余额
 		];
 
 		if ($data) {
@@ -190,13 +215,48 @@ class Usdt extends Api
      */
     public function sell()
     {
-        $num = $this->request->post("num");
-        $bank_id = $this->request->post("bank_id");
-        //校验余额
+	    //币种 USDT
+	    $user = $this->auth->getUserinfo();
+	    $params = $this->request->post("row/a");
+	    $rule = [
+		    'bank_id'   => 'require:number',
+		    'num' => 'require:number|min:1',
+	    ];
 
-		$ret = 1;
-        if ($ret) {
-            $this->success(__('成功'));
+	    //校验
+	    $validate = new Validate($rule);
+	    $result   = $validate->check($params);
+	    if(!$result){
+		    $this->error($validate->getError());
+	    }
+
+	    //余额判断
+	    $balance = \app\api\logic\Usdt::getInstance()->getBalance();
+	    if($balance<$params['num']){
+		    $this->error(__('余额不足'));
+	    }
+
+	    //银行卡判断
+	    $json = Db::name('user_bank_card')->where('id','=',$params['bank_id'])->where('uid','=',$user['id'])->find();
+	    if(!$json){
+		    $this->error(__('银行卡不存在'));
+	    }
+
+	    $rate_arr = \app\api\logic\Usdt::getInstance()->getLatestPrice();
+
+	    //获取参数
+	    $time = time();
+	    $params['user_id'] = $user['id'];
+	    $params['username'] = $user['username'];
+	    $params['rate'] = $rate_arr['local'];
+	    $params['amount'] = $params['num']*$rate_arr['local'];
+	    $params['json'] = json_encode($json);
+	    $params['createtime'] = $time;
+	    $params['updatetime'] = $time;
+	    $data = \app\api\logic\Usdt::getInstance()->Sell($params);
+
+        if ($data) {
+            $this->success(__('卖币成功'),$params);
         } else {
             $this->error(__('验证码不正确'));
         }

@@ -382,7 +382,6 @@ class User extends Api
 	 * 获取邀请信息
 	 */
 	public function get_invite_info() {
-
 		$user = $this->auth->getUser();
 		$uid = 0;
 		if ($user) {
@@ -391,20 +390,15 @@ class User extends Api
 			$this->error(__('未登录'));
 		}
 
-//		$share_info = \app\api\logic\User::getInstance()->getHaiBao($uid);
 		$data = \app\api\logic\User::getInstance()->getInviteInfo($uid);
 		$data['invite_award_msg'] = BaseConfig::getInstance()->getBaseConfig('invite_award_msg');
-//		$bg = Db::name('ads')->where('type','=','3')->value('image');
 //		$bg = Url::build($bg,'',false,true);
 
 		$this->success(__('OK'),[
-//			'img' => $share_info['haibao_url'],
-//			'link' => $share_info['link'],
 			'username' => $user['username'],
 			'invite_code' => $user['invite_code'],
 			'invite_url' => $data['invite_url'],
 			'invite_award_msg' => $data['invite_award_msg'],
-//			'bg' => $bg
 		]);
 	}
 
