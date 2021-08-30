@@ -42,7 +42,7 @@ class Usdt extends Api
     {
 	    //币种 USDT
 	    $user = $this->auth->getUserinfo();
-	    $params = $this->request->post("row/a");
+	    $params = $this->request->param();
 
 	    $result= $this->validate(request()->param(),[
 		    'address'  => 'require|max:64',
@@ -218,7 +218,7 @@ class Usdt extends Api
     {
 	    //币种 USDT
 	    $user = $this->auth->getUserinfo();
-	    $params = $this->request->post("row/a");
+	    $params = $this->request->param();
 
 	    $result= $this->validate(request()->param(),[
 		    'bank_id'   => 'require|number',
