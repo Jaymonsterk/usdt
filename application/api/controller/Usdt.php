@@ -186,7 +186,7 @@ class Usdt extends Api
 		$user = $this->auth->getUserinfo();
 		$bank_list = Db::name('user_bank_card')->where('uid','=',$user['id'])->select();
 		$usdt_rate = \app\api\logic\Usdt::getInstance()->getLatestPrice();
-		$balance = \app\api\logic\Usdt::getInstance()->getBalance();
+		$balance = \app\api\logic\Usdt::getInstance()->getBalance($user['id']);
 
 		$data = [
 			'bank_list'=>$bank_list,//银行卡信息
@@ -224,7 +224,8 @@ class Usdt extends Api
 	    }
 
 	    //余额判断
-	    $balance = \app\api\logic\Usdt::getInstance()->getBalance();
+	    $balance = \app\api\logic\Usdt::getInstance()->getBalance($user['id']);
+
 	    if($balance<$params['num']){
 		    $this->error(__('余额不足'));
 	    }
