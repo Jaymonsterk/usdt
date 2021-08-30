@@ -155,7 +155,7 @@ class Auth
         $time = time();
 
         //判断上级用户
-        $parent_id = Db::name("user")->get_parent_id($extend['invite_code']);
+        $parent_id = (new User())->get_parent_id($extend['invite_code']);
 
         $data = [
             'username' => $username,
