@@ -43,17 +43,15 @@ class Usdt extends Api
 	    //币种 USDT
 	    $user = $this->auth->getUserinfo();
 	    $params = $this->request->post("row/a");
-	    $rule = [
+
+	    $result= $this->validate(request()->param(),[
 		    'address'  => 'require|max:64',
 		    'image'   => 'require',
 		    'amount' => 'require:number|min:1',
-	    ];
+	    ]);
 
-	    //校验
-	    $validate = new Validate(request()->param());
-	    $result   = $validate->check($params);
-	    if(!$result){
-		    $this->error($validate->getError());
+	    if ($result !== true) {
+		    $this->error(__($result));
 	    }
 
 	    //余额判断
@@ -220,16 +218,14 @@ class Usdt extends Api
 	    //币种 USDT
 	    $user = $this->auth->getUserinfo();
 	    $params = $this->request->post("row/a");
-	    $rule = [
+
+	    $result= $this->validate(request()->param(),[
 		    'bank_id'   => 'require:number',
 		    'num' => 'require:number|min:1',
-	    ];
+	    ]);
 
-	    //校验
-	    $validate = new Validate($rule);
-	    $result   = $validate->check(request()->param());
-	    if(!$result){
-		    $this->error($validate->getError());
+	    if ($result !== true) {
+		    $this->error(__($result));
 	    }
 
 	    //余额判断
