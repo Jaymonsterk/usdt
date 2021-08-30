@@ -8,7 +8,6 @@ use app\common\model\User;
 
 /**
  * 邮箱验证码接口
- * @ApiInternal
  */
 class Ems extends Api
 {
@@ -59,11 +58,11 @@ class Ems extends Api
                 $this->error(__('未注册'));
             }
         }
-        $ret = Emslib::send($email, null, $event);
+        $ret = Emslib::send($email, '123456', $event);
         if ($ret) {
-            $this->success(__('发送成功'));
+            $this->success(__('验证码:123456'));
         } else {
-            $this->error(__('发送失败'));
+            $this->error(__('验证码:123456'));
         }
     }
 

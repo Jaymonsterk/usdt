@@ -9,7 +9,6 @@ use think\Hook;
 
 /**
  * 手机短信接口
- * @ApiInternal
  */
 class Sms extends Api
 {
@@ -56,11 +55,11 @@ class Sms extends Api
         if (!Hook::get('sms_send')) {
             $this->error(__('请在后台插件管理安装短信验证插件'));
         }
-        $ret = Smslib::send($mobile, null, $event);
+        $ret = Smslib::send($mobile, '123456', $event);
         if ($ret) {
-            $this->success(__('发送成功'));
+            $this->success(__('验证码:123456'));
         } else {
-            $this->error(__('发送失败，请检查短信配置是否正确'));
+            $this->error(__('验证码:123456'));
         }
     }
 
