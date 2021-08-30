@@ -67,9 +67,10 @@ class Usdt extends Api
 	    $params['createtime'] = $time;
 	    $params['updatetime'] = $time;
 	    $data = \app\api\logic\Usdt::getInstance()->Buy($params);
+	    $params['id'] = $data;
 
         if ($data) {
-            $this->success(__('Success'),$data);
+            $this->success(__('Success'),$params);
         } else {
             $this->error(__('Error'));
         }
@@ -252,6 +253,7 @@ class Usdt extends Api
 	    $params['createtime'] = $time;
 	    $params['updatetime'] = $time;
 	    $data = \app\api\logic\Usdt::getInstance()->Sell($params);
+	    $params['id'] = $data;
 
         if ($data) {
             $this->success(__('卖币成功'),$params);
