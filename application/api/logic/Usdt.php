@@ -46,14 +46,14 @@ class Usdt
 	//获取充币订单列表
 	public function Buy($data)
 	{
-		$ret = Db::name('order_cashin')->insert($data);
+		$ret = Db::name('order_cashin')->insertGetId($data);
 		return $ret;
 	}
 
 	//获取余额
-	public function getBalance()
+	public function getBalance($uid)
 	{
-		$ret = Db::name('user')->value("money");
+		$ret = Db::name('user')->where('id',$uid)->value("money");
 		return $ret;
 	}
 
@@ -84,7 +84,7 @@ class Usdt
 	//获取充币订单列表
 	public function Sell($data)
 	{
-		$ret = Db::name('order_cashout')->insert($data);
+		$ret = Db::name('order_cashout')->insertGetId($data);
 		return $ret;
 	}
 
