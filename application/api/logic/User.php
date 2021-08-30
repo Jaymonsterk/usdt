@@ -114,23 +114,23 @@ class User
         }
 
         //查询以太坊地址
-        $usermoney = Db::name('user_money')->where('uid','=',$uid)->field('address')->find();
-        if (!$usermoney) {
-            $this->error(__('地址为空'));
-        }
+//        $usermoney = Db::name('user_money')->where('uid','=',$uid)->field('address')->find();
+//        if (!$usermoney) {
+//            $this->error(__('地址为空'));
+//        }
 
 
         //邀请注册连接
-        $content = Url::build('chainex/web/register','invite_code='.$userinfo['invite_code'],false,true);
-        $invite_url = 'http://www.baidu.com';
+        $invite_url = Url::build('register','invite_code='.$userinfo['invite_code'],false,true);
+//        $invite_url = 'http://www.baidu.com';
 
         //创建二维码
-        $path = 'uploads/chainex/invite/'.$uid.'.png';
-        Qrcode::create_qrcode($content,$path);
+//        $path = 'uploads/chainex/invite/'.$uid.'.png';
+//        Qrcode::create_qrcode($content,$path);
 
         $data = [
-            'invite_qrcode' => Url::build("/uploads/chainex/invite/".$uid.".png",'',false,true),
-            'invite_url' => $content
+//            'invite_qrcode' => Url::build("/uploads/chainex/invite/".$uid.".png",'',false,true),
+            'invite_url' => $invite_url
         ];
         return $data;
     }
@@ -177,8 +177,6 @@ class User
         $share_info['haibao_url'] = $url;
         return $share_info;
     }
-
-
 
     /**
      * 单例入口

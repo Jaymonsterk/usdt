@@ -154,10 +154,15 @@ class Auth
         $ip = request()->ip();
         $time = time();
 
+        //判断上级用户
+        $parent_id = Db::name("user")->get_parent_id($extend['invite_code']);
+
         $data = [
             'username' => $username,
             'password' => $password,
             'email'    => $email,
+            'invite_code'=> uniqid(),
+            'parent_id'=> $parent_id,
             'mobile'   => $mobile,
             'level'    => 1,
             'score'    => 0,

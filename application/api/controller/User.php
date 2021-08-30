@@ -2,11 +2,14 @@
 
 namespace app\api\controller;
 
+use app\api\logic\BaseConfig;
+use app\api\logic\InviteRecord;
 use app\common\controller\Api;
 use app\common\library\Ems;
 use app\common\library\Sms;
 use fast\Random;
 use think\Config;
+use think\Db;
 use think\Validate;
 
 /**
@@ -32,7 +35,11 @@ class User extends Api
      */
     public function index()
     {
-        $this->success('', ['welcome' => $this->auth->nickname]);
+        $data =[];
+        $user=$this->auth->getUser();
+        $user = Db::name("user")->get($user->id);
+        $data['user_info'] = $user;
+        $this->success('',$data);
     }
 
     /**
@@ -106,6 +113,7 @@ class User extends Api
      * @param string $password 密码
      * @param string $email    邮箱
      * @param string $mobile   手机号
+     * @param string $invite_code   邀请码
      * @param string $code     验证码
      */
     public function register()
@@ -115,6 +123,20 @@ class User extends Api
         $email = $this->request->post('email');
         $mobile = $this->request->post('mobile');
         $code = $this->request->post('code');
+        $invite_code = $this->request->post('invite_code');
+        if ($invite_code) {
+            //判断邀请码是否存在
+            if (Db::name('user')->where(['invite_code' => $invite_code])->count() == 0) {
+                $this->error('邀请码不存在');
+            }
+        }
+
+        //判断是否强制邀请注册
+        $must_invite_code = BaseConfig::getInstance()->getBaseConfig('must_invite_code');
+        if ($must_invite_code == 1 && !$invite_code) {
+            $this->error(__('请输入邀请码'));
+        }
+
         if (!$username || !$password) {
             $this->error(__('Invalid parameters'));
         }
@@ -126,11 +148,23 @@ class User extends Api
         }
         $ret = Sms::check($mobile, $code, 'register');
         if (!$ret) {
-            //$this->error(__('Captcha is incorrect'));
+            $this->error(__('Captcha is incorrect'));
         }
-        $ret = $this->auth->register($username, $password, $email, $mobile, []);
+        $ret = $this->auth->register($username, $password, $email, $mobile, ['invite_code'=>$invite_code]);
         if ($ret) {
             $data = ['userinfo' => $this->auth->getUserinfo()];
+            //邀请信息
+            if ($data && $invite_code != '') {
+                //查询邀请人信息
+//                $invite_userinfo = \app\common\model\User::get(['invite_code' => $invite_code]);
+//                if ($invite_userinfo) {
+//                    InviteRecord::getInstance()->record($data['userinfo']['id'],$invite_userinfo->id);
+//                }
+            }
+            if ($invite_code == '') {
+//                InviteRecord::getInstance()->recordNoInviteCode($data['userinfo']['id']);
+            }
+            //end 邀请信息
             $this->success(__('Sign up successful'), $data);
         } else {
             $this->error($this->auth->getError());
@@ -357,20 +391,20 @@ class User extends Api
 			$this->error(__('未登录'));
 		}
 
-		$share_info = \app\chainex\logic\User::getInstance()->getHaiBao($uid);
-		$data = \app\chainex\logic\User::getInstance()->getInviteInfo($uid);
+//		$share_info = \app\api\logic\User::getInstance()->getHaiBao($uid);
+		$data = \app\api\logic\User::getInstance()->getInviteInfo($uid);
 		$data['invite_award_msg'] = BaseConfig::getInstance()->getBaseConfig('invite_award_msg');
-		$bg = Db::name('ads')->where('type','=','3')->value('image');
-		$bg = Url::build($bg,'',false,true);
+//		$bg = Db::name('ads')->where('type','=','3')->value('image');
+//		$bg = Url::build($bg,'',false,true);
 
 		$this->success(__('OK'),[
-			'img' => $share_info['haibao_url'],
-			'link' => $share_info['link'],
-			'title' => $share_info['title'],
+//			'img' => $share_info['haibao_url'],
+//			'link' => $share_info['link'],
+//			'title' => $share_info['title'],
 			'invite_qrcode' => $data['invite_qrcode'],
 			'invite_url' => $data['invite_url'],
 			'invite_award_msg' => $data['invite_award_msg'],
-			'bg' => $bg
+//			'bg' => $bg
 		]);
 	}
 
@@ -408,4 +442,44 @@ class User extends Api
 		$this->success(__('OK'),$data);
 
 	}
+
+    public function team(){
+        $user =$this->auth->getUser();
+        $uid=$user->id;
+        $userModel =new \app\admin\model\User();
+        $user =$userModel->find($uid);
+        $res =$this->getTree($uid,0);
+        $price =$user->money;
+        $arr1[0]=[];
+        $arr1[1]=[];
+        $p1count =0;
+        $p2count =0;
+        foreach ($res as $key =>$v){
+            $v['mobile']=hidtel($v['mobile']);
+            if($v['lv']==0){
+                array_push($arr1[0],$v);
+                $p1count++;
+            }
+            if($v['lv']==1){
+                array_push($arr1[1],$v);
+                $p2count++;
+            }
+            $price+=$v['money'];
+        }
+        $data=['arr'=>$arr1,'price'=>$price,'count'=>count($res),'p1count'=>$p1count,'p2count'=>$p2count];
+        $this->success('获取成功',$data);
+
+    }
+    public function getTree($pid,$lv){
+        static $arr=array();
+        $data=Db::table('fa_user')->where('p1',$pid)->field('username,mobile,money,score,p1,id,avatar')->select();
+        foreach ($data as $key => $value) {
+            if($value['p1'] == $pid){
+                $value['lv']=$lv;
+                array_push($arr,$value);
+                $this->getTree($value['id'],$lv+1);
+            }
+        }
+        return $arr;
+    }
 }

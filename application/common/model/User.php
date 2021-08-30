@@ -148,4 +148,18 @@ class User extends Model
         }
         return $level;
     }
+
+    /**
+     * 上级用户
+     * @param $invite_code
+     * @return array|bool|float|int|mixed|object|\stdClass|string|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function get_parent_id($invite_code){
+        $user = $this->where('invite_code',$invite_code)->find();
+        return $user?$user->id:'0';
+    }
+
 }
