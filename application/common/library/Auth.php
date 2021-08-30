@@ -26,7 +26,7 @@ class Auth
     //默认配置
     protected $config = [];
     protected $options = [];
-    protected $allowFields = ['id', 'username', 'nickname', 'mobile', 'avatar', 'score','money'];
+    protected $allowFields = ['id', 'username', 'nickname', 'mobile', 'avatar', 'score','money','invite_code','parent_id'];
 
     public function __construct($options = [])
     {
@@ -156,6 +156,7 @@ class Auth
 
         //判断上级用户
         $parent_id = (new User())->get_parent_id($extend['invite_code']);
+        unset($extend['invite_code']);
 
         $data = [
             'username' => $username,

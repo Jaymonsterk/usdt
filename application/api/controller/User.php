@@ -37,7 +37,7 @@ class User extends Api
     {
         $data =[];
         $user=$this->auth->getUser();
-        $user = Db::name("user")->get($user->id);
+        $user = (new \app\common\model\User())->find($user->id);
         $data['user_info'] = $user;
         $this->success('',$data);
     }
