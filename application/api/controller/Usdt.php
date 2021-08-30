@@ -54,12 +54,6 @@ class Usdt extends Api
 		    $this->error(__($result));
 	    }
 
-	    //余额判断
-	    $balance = \app\api\logic\Usdt::getInstance()->getBalance();
-	    if($balance<$params['amount']){
-		    $this->error(__('余额不足'));
-	    }
-
 	    //获取参数
 	    $time = time();
 	    $params['user_id'] = $user['id'];
