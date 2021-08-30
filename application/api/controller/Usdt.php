@@ -92,6 +92,7 @@ class Usdt extends Api
 	    //条件
 	    $status = $this->request->post("status","");
 	    $my = $this->request->post("my","");
+	    $where = [];
 	    if($status){
 		    $where['status'] = $status;
 	    }
@@ -123,7 +124,7 @@ class Usdt extends Api
 
 	    $status = $this->request->post("status","");
 	    $my = $this->request->post("my","");
-
+	    $where = [];
 	    if($status){
 		    $where['status'] = $status;
 	    }
@@ -166,6 +167,7 @@ class Usdt extends Api
 		$user = $this->auth->getUserinfo();
 
 		$status = $this->request->post("status","");
+		$where = [];
 		$where = [
 			"user_id"=>$user['id'],
 		];
