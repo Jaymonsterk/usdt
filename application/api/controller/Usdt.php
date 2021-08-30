@@ -20,7 +20,7 @@ class Usdt extends Api
      *
      * @ApiMethod (POST)
      */
-    public function buy()
+    public function buy_info()
     {
 	    //币种 USDT
 	    $tips = "
@@ -45,6 +45,50 @@ class Usdt extends Api
             $this->success(__('获取充币地址成功'),$data);
         } else {
             $this->error(__('地址配置不正确'));
+        }
+    }
+
+    /**
+     * 提交充币凭证
+     *
+     * @ApiMethod (POST)
+     * @param string $status 状态 1=交易中，2=已完成,3=已取消
+     * @param string $my 是否我的交易
+     */
+    public function buy()
+    {
+	    //币种 USDT
+	    $data = [
+    		['id'=>1,'username'=>'user01','status'=>1,'num'=>'1000','rate'=>'6.5','total'=>6500,'type'=>'银行卡'],
+    		['id'=>2,'username'=>'user02','status'=>2,'num'=>'2000','rate'=>'6.5','total'=>13000,'type'=>'银行卡'],
+	    ];
+
+        if ($data) {
+            $this->success(__('Success'),$data);
+        } else {
+            $this->error(__('Error'));
+        }
+    }
+
+    /**
+     * 充币订单列表
+     *
+     * @ApiMethod (POST)
+     * @param string $status 状态 1=交易中，2=已完成,3=已取消
+     * @param string $my 是否我的交易
+     */
+    public function buy_order_list()
+    {
+	    //币种 USDT
+	    $data = [
+    		['id'=>1,'username'=>'user01','status'=>1,'num'=>'1000','rate'=>'6.5','total'=>6500,'type'=>'银行卡'],
+    		['id'=>2,'username'=>'user02','status'=>2,'num'=>'2000','rate'=>'6.5','total'=>13000,'type'=>'银行卡'],
+	    ];
+
+        if ($data) {
+            $this->success(__('Success'),$data);
+        } else {
+            $this->error(__('Error'));
         }
     }
 
