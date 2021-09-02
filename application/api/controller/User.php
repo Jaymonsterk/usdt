@@ -416,7 +416,7 @@ class User extends Api
 
 		$tmp_data = \app\api\logic\User::getInstance()->getInviteList($uid,$page_rows);
 
-		$list = $tmp_data->toArray();
+		$data = $tmp_data->toArray();
 
 		//获取邀请总数
 		$invite_num = \app\api\logic\User::getInstance()->getInviteNum($uid);
@@ -424,12 +424,11 @@ class User extends Api
 		//查询邀请总奖励
 		//$invite_award = \app\api\logic\Usermoney::getInstance()->getInviteAwardTotal($uid);
 
-		$data['list'] = $list;
-		$data['invite_num'] = $invite_num;
-		$data['invite_award'] = 0;
+        $data['invite_num'] = $invite_num;
+        $data['invite_award'] = 0;
 
 		//格式化数据
-		foreach ($list as $k => &$v) {
+		foreach ($data['data'] as $k => &$v) {
 			$v['invite_num'] = \app\api\logic\User::getInstance()->getInviteNum($v['id']);
 			$v['invite_award'] = 0;
 		}
