@@ -20,7 +20,7 @@ class User
 
     //获取邀请总人数
     public function getInviteNum($uid) {
-        return Db::name('user')->where('parent_uid','=',$uid)->count();
+        return Db::name('user')->where('parent_id','=',$uid)->count();
     }
 
     //获取邀请列表
