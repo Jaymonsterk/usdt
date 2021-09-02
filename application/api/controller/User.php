@@ -429,7 +429,7 @@ class User extends Api
 		$data['invite_award'] = 0;
 
 		//格式化数据
-		foreach ($data['data'] as $k => &$v) {
+		foreach ($list as $k => &$v) {
 			$v['invite_num'] = \app\api\logic\User::getInstance()->getInviteNum($v['id']);
 			$v['invite_award'] = 0;
 		}
