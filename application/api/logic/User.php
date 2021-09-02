@@ -20,20 +20,17 @@ class User
 
     //获取邀请总人数
     public function getInviteNum($uid) {
-        return Db::name('invite_record')->where('parent_uid','=',$uid)->count();
+        return Db::name('user')->where('parent_uid','=',$uid)->count();
     }
 
     //获取邀请列表
     public function getInviteList($uid,$page_rows) {
-        $data = Db::name('invite_record')
-            ->alias('ir')
-            ->join('user u','ir.uid = u.id','LEFT')
-            ->field('ir.uid,u.nickname,u.logintime create_time')
-            ->where('ir.parent_uid','=',$uid)
-            ->order('ir.id desc')
-            ->paginate($page_rows,true,[
-                'query' => []
-            ]);
+        $data = Db::name('user')
+            ->field('id,username,nickname,mobile,email,createtime')
+            ->where('parent_id','=',$uid)
+            ->where('status','=','normal')
+            ->order('id desc')
+            ->paginate($page_rows);
         return $data;
     }
 
