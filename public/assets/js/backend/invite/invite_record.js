@@ -22,20 +22,28 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
                 sortName: 'id',
+                //切换卡片视图和表格视图两种模式
+                showToggle:false,
+                //显示隐藏列可以快速切换字段列的显示和隐藏
+                showColumns:true,
+                //导出整个表的所有行导出整个表的所有行
+                showExport:false,
+                //搜索
+                search: false,
+                //搜索功能，
+                commonSearch: true,
+                //表格上方的搜索搜索指表格上方的搜索
+                searchFormVisible: true,
                 columns: [
                     [
-                        {checkbox: true},
-                        {field: 'id', title: __('Id')},
-                        {field: 'uid', title: __('Uid')},
-                        {field: 'parent_uid', title: __('Parent_uid')},
-                        {field: 'parent_uids', title: __('Parent_uids'), operate: 'LIKE'},
-                        {field: 'invite_uids', title: __('Invite_uids'), operate: 'LIKE'},
+                        // {checkbox: true},
+                        {field: 'id', title: __('Uid')},
+                        {field: 'username', title: __('Username'), operate: 'LIKE'},
+                        // {field: 'nickname', title: __('Nickname'), operate: 'LIKE'},
+                        {field: 'parent_id', title: __('上级用户ID')},
+                        {field: 'invite_num', title: __('直推人数'), operate: false},
                         {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
-                        {field: 'group6_uid', title: __('Group6_uid')},
-                        {field: 'group7_uid', title: __('Group7_uid')},
-                        {field: 'group8_uid', title: __('Group8_uid')},
-                        {field: 'platform_uid', title: __('Platform_uid')},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        // {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
             });
