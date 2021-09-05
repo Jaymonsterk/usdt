@@ -25,14 +25,23 @@ class MoneyLog extends Model
 
     // 追加属性
     protected $append = [
-
+        'type_text'
     ];
     
 
     
+    public function getTypeList()
+    {
+        return ['0' => __('Type 0'), '1' => __('Type 1')];
+    }
 
 
-
+    public function getTypeTextAttr($value, $data)
+    {
+        $value = $value ? $value : (isset($data['type']) ? $data['type'] : '');
+        $list = $this->getTypeList();
+        return isset($list[$value]) ? $list[$value] : '';
+    }
 
 
 

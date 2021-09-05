@@ -223,6 +223,9 @@ class Usdt extends Api
 		    $this->error(__($result));
 	    }
 
+        $uid = $user['id'];
+        $amount = -1*$params['num'];
+
 	    //余额判断
 	    $balance = \app\api\logic\Usdt::getInstance()->getBalance($user['id']);
 
@@ -251,6 +254,9 @@ class Usdt extends Api
 	    $params['id'] = $data;
 
         if ($data) {
+            //扣除U
+            \app\admin\model\User::useaMoney($uid,$amount,3);
+
             $this->success(__('卖币成功'),$params);
         } else {
             $this->error(__('验证码不正确'));

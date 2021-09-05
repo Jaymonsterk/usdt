@@ -2,8 +2,11 @@
 
 namespace app\admin\model;
 
+use app\admin\model\user\UserMoneyLog;
 use app\common\model\MoneyLog;
 use app\common\model\ScoreLog;
+use think\Cache;
+use think\Db;
 use think\Model;
 
 class User extends Model
@@ -109,5 +112,49 @@ class User extends Model
     {
         return $this->belongsTo('UserGroup', 'group_id', 'id', [], 'LEFT')->setEagerlyType(0);
     }
+
+    //用户资金操作
+    //$type为 extra/money.php内user_money_log 对应的数据
+    //$moneytype = money 用户金额  $moneytype = mortgage 用户押金
+    public static function useaMoney($uid, $money,$type,$orderid='',$moneytype='money',$data=[])
+    {
+        if(!in_array($moneytype,['money','agent'])){
+            return false;
+        }
+
+        if(empty($data)){
+            $data = self::where("id",$uid)->find();
+        }
+        if($money > 0){
+            self::where('id',$uid)->setInc($moneytype,$money);
+        }else{
+            self::where('id',$uid)->setDec($moneytype,abs($money));
+        }
+        $user_money_log = config('site.user_money_log');
+        if(!isset($user_money_log[$type])){
+            echo "用户资金日志 site.user_money_log 的 type 错误";exit;
+        }
+        $type_arr = isset($user_money_log[$type])?$user_money_log[$type]:$user_money_log[0];
+
+        $arr = [];
+        $arr['user_id']=$data['id'];
+        $arr['username']=$data['username'];
+        $arr['money']=$money;
+        $arr['before']=$data['money'];
+        $arr['after']=$data['money'] + $money;
+        $arr['type']=$type;
+        $arr['typename']=$user_money_log[$type];
+        $arr['memo']=$data['note']??"";
+        $arr['createtime']=time();
+        self::inUserMoneyLog($arr);
+        return true;
+    }
+    //插入日志
+    public static function inUserMoneyLog($arr)
+    {
+        $UserMoneyLog = new MoneyLog($arr);
+        $UserMoneyLog->save();
+    }
+
 
 }

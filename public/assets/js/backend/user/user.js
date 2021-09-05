@@ -34,6 +34,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'level', title: __('Level'), operate: 'BETWEEN', sortable: true},
                         {field: 'gender', title: __('Gender'), visible: false, searchList: {1: __('Male'), 0: __('Female')}},
                         {field: 'score', title: __('Score'), operate: 'BETWEEN', sortable: true},
+                        {field: 'money', title: __('Money'), operate: 'BETWEEN', sortable: true},
                         {field: 'successions', title: __('Successions'), visible: false, operate: 'BETWEEN', sortable: true},
                         {field: 'maxsuccessions', title: __('Maxsuccessions'), visible: false, operate: 'BETWEEN', sortable: true},
                         {field: 'logintime', title: __('Logintime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
@@ -41,7 +42,25 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'jointime', title: __('Jointime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
                         {field: 'joinip', title: __('Joinip'), formatter: Table.api.formatter.search},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status, searchList: {normal: __('Normal'), hidden: __('Hidden')}},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate,
+                            buttons:[
+                                {
+                                    name: 'recharge',
+                                    text: __('Manual Recharge'),
+                                    classname: 'btn btn-xs btn-danger btn-dialog',
+                                    icon: 'fa fa-list',
+                                    url: function (row) {
+                                        return 'user/user/recharge/ids/'+row.id;
+                                    },
+                                    callback: function (data) {
+                                        //回调方法，用来响应 Fast.api.close()方法 **注意不能有success 是btn-ajax的回调，btn-dialog 用的callback回调，两者不能同存！！！！
+                                        //$(".btn-refresh").trigger("click");//刷新当前页面的数据
+                                        Layer.alert("recharge：" + data.msg);
+                                        //console.error(data);//控制输出回调数据
+                                    },
+                                },
+                            ]
+                        }
                     ]
                 ]
             });
@@ -53,6 +72,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Controller.api.bindevent();
         },
         edit: function () {
+            Controller.api.bindevent();
+        },
+        recharge: function () {
             Controller.api.bindevent();
         },
         api: {
