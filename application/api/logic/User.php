@@ -118,7 +118,7 @@ class User
 
 
         //邀请注册连接
-        $invite_url = Url::build('register','',false,true).'?invite_code='.$userinfo['invite_code'];
+        $invite_url =  Url::build('/register','',false,"www.onlinefxcoin.ml").'?invite_code='.$userinfo['invite_code'];
 //        $invite_url = 'http://www.baidu.com';
 
         //创建二维码
