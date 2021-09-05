@@ -62,9 +62,21 @@ class Usdt
 	public function getLatestPrice()
 	{
 		//汇率
-		$usdt_rate = [
-			"huobi"=>6.5,
-			"local"=>6.55,
+        $usdt_price = 6.3;
+        $inc_price = 6.39;
+        $is_real_price = BaseConfig::getInstance()->getBaseConfig('is_real_price');
+        if($is_real_price){
+            //实时价格从接口取
+        }else {
+            //固定价格
+            $usdt_price = BaseConfig::getInstance()->getBaseConfig('cn_price');
+            $inc_point = BaseConfig::getInstance()->getBaseConfig('inc_point');
+            $inc_price = $usdt_price * (1 + $inc_point);
+        }
+
+        $usdt_rate = [
+			"huobi"=>$usdt_price,
+			"local"=>$inc_price,
 		];
 		return $usdt_rate;
 	}
