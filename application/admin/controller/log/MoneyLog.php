@@ -22,7 +22,7 @@ class MoneyLog extends Backend
     {
         parent::_initialize();
         $this->model = new \app\admin\model\log\MoneyLog;
-        $this->assignconfig("user_money_log",array_reverse(config("site.user_money_log"),true));
+        $this->assignconfig("user_money_log",array_reverse(config("site.user_money_log")?:[],true));
     }
 
     public function import()

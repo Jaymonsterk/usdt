@@ -223,4 +223,74 @@ if (!function_exists('build_suffix_image')) {
 EOT;
         return $icon;
     }
+
+
+    /**
+     * 我的代理商下级类别
+     * @return array uids
+     */
+    function mytime_oids($uid)
+    {
+
+        if (!$uid) {
+            return false;
+        }
+        $map['parent_id'] = $uid;
+//        $map['otype'] = 101;
+
+        $list = db('user')->field('id,parent_id,username,mobile,nickname,money')->where($map)->select();
+        $uids = array();
+        foreach ($list as $key => $v) {
+            $user = mytime_oids($v["id"]);
+            $uids[$key] = $v;
+            if (is_array($user) && !empty($user)) {
+                //$uids += $user;
+                $uids[$key]['mysons'] = $user;
+            }
+        }
+        return $uids;
+
+
+    }
+
+    /**
+     * 我的团队树状图
+     * @author lukui  2017-07-18
+     * @param  [type]  $array [description]
+     * @param  integer $type [description]
+     */
+    function set_my_team_html($array, $type = 1)
+    {
+
+        if (!$array) {
+            return false;
+        }
+
+        $margin_left = 25 + 25 * $type;
+
+        $html = '<div  class="foid_' . $array[0]['parent_id'] . '">';
+        foreach ($array as $k => $vo) {
+            //dump($v);
+            $html .= '<div style="display:none" class="oid_list oid_' . $vo['parent_id'] . '">
+	                  <div class="vo_son" style="margin-left: ' . $margin_left . 'px;"><p>|——' . $type . '级</p></div>
+	                    <div class="div_my_son">
+	                      <ul class="my_sons">
+	                        <li>名称：' . $vo['username'] . ' 余额：' . $vo['money'] . '</li>
+	                        <li>手机：' . $vo['mobile'] . ' <a href="'. url("user/user")  .'?id=' . $vo['id'] . '"><button class="btn btn-primary btn-xs">详情</button></a></li>
+	                      </ul>
+	                      <a href="javascript:;"><p class="showdiv show_uid_' . $vo['id'] . '" onclick="showoid(' . $vo['id'] . ',1)" >+</p></a>
+	                      </div>
+	                </div>
+	                ';
+
+            if (isset($vo['mysons']) && is_array($vo['mysons']) && !empty($vo['mysons'])) {
+                $html .= set_my_team_html($vo['mysons'], $type + 1);
+            }
+        }
+
+        $html .= '</div>';
+        return $html;
+
+    }
+
 }
