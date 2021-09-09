@@ -3,7 +3,6 @@
 namespace app\admin\controller\invite;
 
 use app\common\controller\Backend;
-use think\Db;
 
 /**
  * 邀请记录管理
@@ -42,6 +41,8 @@ class InviteRecord extends Backend
      */
     public function index()
     {
+        //当前是否为关联查询
+        $this->relationSearch = false;
         //设置过滤方法
         $this->request->filter(['strip_tags', 'trim']);
         if ($this->request->isAjax()) {
@@ -50,20 +51,35 @@ class InviteRecord extends Backend
                 return $this->selectpage();
             }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+
             $list = $this->model
+
                 ->where($where)
                 ->order($sort, $order)
                 ->paginate($limit);
-            foreach ($list as $k => $v) {
-                $v->avatar = $v->avatar ? cdnurl($v->avatar, true) : letter_avatar($v->nickname);
-                $v->invite_num = Db::name("user")->where('parent_id',$v['id'])->count("id");
-                $v->hidden(['password', 'salt']);
+
+            foreach ($list as $row) {
+                //$row->visible(['id','reportid','uid','uname','totalmoney','totalnum','successmoney','successnum','failmoney','failnum','umoney','sysmoney','agencymoney','channelmoney','dates']);
             }
-            $result = array("total" => $list->total(), "rows" => $list->items());
+            $rows = $list->items();
+
+            //增加统计
+            $totalsum = $this->model
+                ->field("id,user_id,username,dates")
+                ->field("sum(reg_num) as reg_num,sum(recharge_usdt) as recharge_usdt,sum(withdraw_rmb) as withdraw_rmb")
+                ->where($where)
+                ->find();
+
+            $totalsum['dates'] = 'Total';
+            $totalsum['uid'] = '-';
+            $totalsum['uname'] = '-';
+
+            array_push($rows,$totalsum);
+
+            $result = array("total" => $list->total(), "rows" => $rows);
 
             return json($result);
         }
         return $this->view->fetch();
     }
-
 }

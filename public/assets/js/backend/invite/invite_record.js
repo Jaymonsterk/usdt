@@ -37,12 +37,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 columns: [
                     [
                         // {checkbox: true},
-                        {field: 'id', title: __('Uid')},
+                        {field: 'dates', title: __('Dates'), operate:'RANGE', addclass:'datetimerange', autocomplete:false},
+                        // {field: 'id', title: __('Id')},
+                        {field: 'user_id', title: __('User_id')},
                         {field: 'username', title: __('Username'), operate: 'LIKE'},
-                        // {field: 'nickname', title: __('Nickname'), operate: 'LIKE'},
-                        {field: 'parent_id', title: __('上级用户ID')},
-                        {field: 'invite_num', title: __('直推人数'), operate: false},
-                        {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
+                        {field: 'reg_num', title: __('Reg_num')},
+                        {field: 'recharge_usdt', title: __('Recharge_usdt'), operate:'BETWEEN'},
+                        {field: 'withdraw_rmb', title: __('Withdraw_rmb'), operate:'BETWEEN'},
+                        // {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
                         // {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
