@@ -40,7 +40,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'id', title: __('Id')},
                         {field: 'user_id', title: __('User_id')},
                         {field: 'username', title: __('Username'), operate: 'LIKE'},
-                        {field: 'address', title: __('Address'), operate: 'LIKE'},
+                        {field: 'address', title: __('Address'), operate: 'LIKE',formatter: Controller.api.formatter.address},
                         {field: 'amount', title: __('Amount'), operate:'BETWEEN'},
                         {field: 'image', title: __('Image'), operate: false, events: Table.api.events.image, formatter: Table.api.formatter.image},
                         {field: 'status', title: __('Status'), searchList: {"0":__('Status 0'),"1":__('Status 1'),"2":__('Status 2')}, formatter: Table.api.formatter.status},
@@ -100,7 +100,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         api: {
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
-            }
+            },
+            formatter: {//渲染的方法
+                address: function (value, row, index) {
+                    return '<a class="btn btn-xs btn-ip bg-success" href="https://etherscan.io/address/' + value + '" target="_blank"><i class="fa fa-link"></i> ' + value + '</a>';
+                },
+            },
         }
     };
     return Controller;
