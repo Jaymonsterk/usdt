@@ -1,57 +1,45 @@
 <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
 
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Uid')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('User_id')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-uid" class="form-control" name="row[uid]" type="number" value="{$row.uid|htmlentities}">
+            <input id="c-user_id" data-rule="required" data-source="user/user/index" data-field="nickname" class="form-control selectpage" name="row[user_id]" type="text" value="{$row.user_id|htmlentities}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Parent_uid')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('Username')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-parent_uid" class="form-control" name="row[parent_uid]" type="number" value="{$row.parent_uid|htmlentities}">
+            <input id="c-username" class="form-control" name="row[username]" type="text" value="{$row.username|htmlentities}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Parent_uids')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('Reg_num')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-parent_uids" class="form-control" name="row[parent_uids]" type="text" value="{$row.parent_uids|htmlentities}">
+            <input id="c-reg_num" class="form-control" name="row[reg_num]" type="number" value="{$row.reg_num|htmlentities}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Invite_uids')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('Recharge_usdt')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-invite_uids" class="form-control" name="row[invite_uids]" type="text" value="{$row.invite_uids|htmlentities}">
+            <input id="c-recharge_usdt" class="form-control" step="0.01" name="row[recharge_usdt]" type="number" value="{$row.recharge_usdt|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Withdraw_rmb')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-withdraw_rmb" class="form-control" step="0.01" name="row[withdraw_rmb]" type="number" value="{$row.withdraw_rmb|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Dates')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-dates" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="row[dates]" type="text" value="{$row.dates}">
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Create_time')}:</label>
         <div class="col-xs-12 col-sm-8">
             <input id="c-create_time" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[create_time]" type="text" value="{:$row.create_time?datetime($row.create_time):''}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Group6_uid')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-group6_uid" class="form-control" name="row[group6_uid]" type="number" value="{$row.group6_uid|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Group7_uid')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-group7_uid" class="form-control" name="row[group7_uid]" type="number" value="{$row.group7_uid|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Group8_uid')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-group8_uid" class="form-control" name="row[group8_uid]" type="number" value="{$row.group8_uid|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Platform_uid')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-platform_uid" class="form-control" name="row[platform_uid]" type="number" value="{$row.platform_uid|htmlentities}">
         </div>
     </div>
     <div class="form-group layer-footer">
