@@ -37,9 +37,9 @@ class Usdt
 		$data = Db::name('order_cashin')->field('id,user_id,username,address,amount,image,status,note,createtime,opertime')
 			->where($where)
 			->order('createtime desc')
-			->paginate($page_rows,true,[
-				'query' => []
-			]);
+			->paginate($page_rows,false,[
+                'query' => request()->param(),
+            ]);
 		return $data;
 	}
 
@@ -87,8 +87,8 @@ class Usdt
 		$data = Db::name('order_cashout')->field('id,user_id,username,num,rate,type,status,note,createtime,opertime')
 			->where($where)
 			->order('createtime desc')
-			->paginate($page_rows,true,[
-				'query' => []
+			->paginate($page_rows,false,[
+				'query' => request()->param(),
 			]);
 		return $data;
 	}

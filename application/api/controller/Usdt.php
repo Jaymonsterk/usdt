@@ -85,7 +85,8 @@ class Usdt extends Api
 	    //条件
 	    $status = $this->request->post("status","");
 	    $my = $this->request->post("my","");
-	    $where = [];
+        $page_size = $this->request->post("page_size","20");
+        $where = [];
 	    if($status){
 		    $where['status'] = $status;
 	    }
@@ -94,7 +95,7 @@ class Usdt extends Api
 	    }
 
 	    //获取数据
-	    $data = \app\api\logic\Usdt::getInstance()->getBuyOrderList($where);
+	    $data = \app\api\logic\Usdt::getInstance()->getBuyOrderList($where,$page_size);
 
         if ($data) {
             $this->success(__('Success'),$data);
@@ -117,6 +118,7 @@ class Usdt extends Api
 
 	    $status = $this->request->post("status","");
 	    $my = $this->request->post("my","");
+	    $page_size = $this->request->post("page_size","20");
 	    $where = [];
 	    if($status){
 		    $where['status'] = $status;
@@ -124,7 +126,7 @@ class Usdt extends Api
 	    if($my){
 		    $where['user_id'] = $user['id'];
 	    }
-	    $data = \app\api\logic\Usdt::getInstance()->getSellOrderList($where);
+	    $data = \app\api\logic\Usdt::getInstance()->getSellOrderList($where,$page_size);
 
         if ($data) {
             $this->success(__('Success'),$data);
