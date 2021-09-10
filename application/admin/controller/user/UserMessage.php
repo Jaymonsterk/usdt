@@ -22,6 +22,7 @@ class UserMessage extends Backend
     {
         parent::_initialize();
         $this->model = new \app\admin\model\user\UserMessage;
+        $this->view->assign("statusList", $this->model->getStatusList());
 
     }
 

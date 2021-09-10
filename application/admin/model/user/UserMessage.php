@@ -22,8 +22,14 @@ class UserMessage extends Model
     // 追加属性
     protected $append = [
         'ctime_text',
+        'status_text',
         'utime_text'
     ];
+    
+    public function getStatusList()
+    {
+        return ['0' => __('Status 0'), '1' => __('Status 1')];
+    }
 
     protected static function init()
     {
@@ -54,6 +60,14 @@ class UserMessage extends Model
     {
         $value = $value ? $value : (isset($data['ctime']) ? $data['ctime'] : '');
         return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
+    }
+
+
+    public function getStatusTextAttr($value, $data)
+    {
+        $value = $value ? $value : (isset($data['status']) ? $data['status'] : '');
+        $list = $this->getStatusList();
+        return isset($list[$value]) ? $list[$value] : '';
     }
 
 
