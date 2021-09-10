@@ -133,6 +133,29 @@ class Usdt extends Api
         }
     }
 
+    /**
+     * 卖币虚拟用户列表
+     *
+     * @ApiMethod (POST)
+     * @param string $status 状态 1=交易中，2=已完成,3=已取消
+     * @param string $my 是否我的交易
+     */
+    public function sell_user_list()
+    {
+        //币种 USDT
+        $user = $this->auth->getUserinfo();
+
+        $where = [];
+        $where['status'] = 1;
+        $data = db("user_virtual")->where($where)->select();
+
+        if ($data) {
+            $this->success(__('Success'),$data);
+        } else {
+            $this->error(__('Error'));
+        }
+    }
+
 	/**
 	 * 最新USDT汇率
 	 */

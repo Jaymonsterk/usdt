@@ -16,7 +16,7 @@ use think\Hook;
  */
 class Common extends Api
 {
-    protected $noNeedLogin = ['init'];
+    protected $noNeedLogin = ['init','getPubInfo'];
     protected $noNeedRight = '*';
 
     /**
@@ -127,5 +127,16 @@ class Common extends Api
             $this->success(__('Uploaded successful'), ['url' => $attachment->url, 'fullurl' => cdnurl($attachment->url, true)]);
         }
 
+    }
+
+    public function getPubInfo()
+    {
+        $notice = db("user_message")->field("title,content,cdate")->where("status",1)->order("id desc")->find();
+        $notice = $notice;
+        $data = [
+            "kefu"=>config("site.kefu"),
+            "notice"=> $notice,
+        ];
+        $this->success("Success",$data);
     }
 }
