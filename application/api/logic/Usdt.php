@@ -2,6 +2,7 @@
 
 namespace app\api\logic;
 
+use fast\Http;
 use fast\Random;
 use think\Cache;
 use think\Config;
@@ -65,18 +66,31 @@ class Usdt
         $usdt_price = 6.3;
         $inc_price = 6.39;
         $is_real_price = BaseConfig::getInstance()->getBaseConfig('is_real_price');
+        $is_real_price = 1;
         if($is_real_price){
-            //实时价格从接口取
+            //实时价格从接口取 非小号接口
+            $url = "https://dncapi.bqrank.net/api/coin/web-rate?webp=1";
+            $tmp_data = Http::get($url);
+            $lastest_price_arr = json_decode($tmp_data,true);
+            if(isset($lastest_price_arr['data'])){
+                foreach ($lastest_price_arr['data'] as $row){
+                    if(isset($row['cny'])){
+                        $usdt_price = sprintf("%4f",$row['cny']);
+                    }
+                }
+            }
         }else {
             //固定价格
             $usdt_price = BaseConfig::getInstance()->getBaseConfig('cn_price');
-            $inc_point = BaseConfig::getInstance()->getBaseConfig('inc_point');
-            $inc_price = $usdt_price * (1 + $inc_point);
         }
+        $usdt_price = sprintf("%.4f",$usdt_price);
+        $inc_point = BaseConfig::getInstance()->getBaseConfig('inc_point');
+        $local_price = $usdt_price * (1 + $inc_point);
+        $local_price = sprintf("%.4f",$local_price);
 
         $usdt_rate = [
 			"huobi"=>$usdt_price,
-			"local"=>$inc_price,
+			"local"=>$local_price,
 		];
 		return $usdt_rate;
 	}

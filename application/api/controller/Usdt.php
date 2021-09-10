@@ -13,7 +13,7 @@ use think\Hook;
  */
 class Usdt extends Api
 {
-    protected $noNeedLogin = '';
+    protected $noNeedLogin = 'latest_price';
     protected $noNeedRight = '*';
 
     /**
