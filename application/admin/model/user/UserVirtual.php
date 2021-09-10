@@ -5,11 +5,15 @@ namespace app\admin\model\user;
 use think\Model;
 
 
-class UserMessage extends Model
+class UserVirtual extends Model
 {
 
+    
+
+    
+
     // 表名
-    protected $name = 'user_message';
+    protected $name = 'user_virtual';
     
     // 自动写入时间戳字段
     protected $autoWriteTimestamp = false;
@@ -25,36 +29,14 @@ class UserMessage extends Model
         'status_text',
         'utime_text'
     ];
+    
 
+    
     public function getStatusList()
     {
         return ['0' => __('Status 0'), '1' => __('Status 1')];
     }
 
-    protected static function init()
-    {
-        self::beforeInsert(function ($row) {
-            //操作者
-            if (!isset($row['aid']) || !$row['aid']) {
-                $row['aid'] = session('admin.id');
-            }
-            if (!isset($row['aname']) || !$row['aname']) {
-                $row['aname'] = session('admin.username');
-            }
-            $row['ctime'] = time();
-            $row['cdate'] = date("Y-m-d H:i:s");
-            if (!isset($row['utime']) || !$row['utime']) {
-                $row['utime'] = time();
-            }
-        });
-
-        self::beforeUpdate(function ($row) {
-            //操作者
-            $row['aid'] = session('admin.id');
-            $row['aname'] = session('admin.username');
-            $row['utime'] = time();
-        });
-    }
 
     public function getCtimeTextAttr($value, $data)
     {

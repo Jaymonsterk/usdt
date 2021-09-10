@@ -7,5 +7,8 @@ return [
     'Cdate'   => '创建时间（年月日时分秒）',
     'Aid'     => '操作者id',
     'Aname'   => '操作者用户名',
-    'Utime'   => '操作时间'
+    'Utime'   => '操作时间',
+    'Status'         => '状态',
+    'Status 0'       => '禁用',
+    'Status 1'       => '启用',
 ];
