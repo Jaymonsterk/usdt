@@ -83,10 +83,10 @@ class Usdt
             //固定价格
             $usdt_price = BaseConfig::getInstance()->getBaseConfig('cn_price');
         }
-        $usdt_price = round($usdt_price,2);
+        $usdt_price = sprintf("%.2f",round($usdt_price,2));
         $inc_point = BaseConfig::getInstance()->getBaseConfig('inc_point');
         $local_price = $usdt_price * (1 + $inc_point);
-        $local_price = round($local_price,2);
+        $local_price = sprintf("%.2f",round($local_price,2));
 
         $usdt_rate = [
 			"huobi"=>$usdt_price,
