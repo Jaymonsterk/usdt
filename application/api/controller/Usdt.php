@@ -2,6 +2,7 @@
 
 namespace app\api\controller;
 
+use app\api\logic\BaseConfig;
 use app\common\controller\Api;
 use app\common\library\Sms as Smslib;
 use app\common\model\User;
@@ -253,6 +254,11 @@ class Usdt extends Api
 
 	    //余额判断
 	    $balance = \app\api\logic\Usdt::getInstance()->getBalance($user['id']);
+
+        $min_outtoken_limit = BaseConfig::getInstance()->getBaseConfig('min_outtoken_limit');
+        if($params['num']<$min_outtoken_limit){
+            $this->error(__('最小卖U额度: '.$min_outtoken_limit));
+        }
 
 	    if($balance<$params['num']){
 		    $this->error(__('余额不足'));
