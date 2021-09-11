@@ -106,6 +106,9 @@ class Analytics extends Command
             $withdraw_rmb = db("order_cashout")->where("status",2)
                 ->where('opertime', 'between time', [$starttime, $endtime])->sum("amount");
             $data['recharge_usdt'] = $recharge_usdt;
+            $withdraw_usdt = db("order_cashout")->where("status",2)
+                ->where('opertime', 'between time', [$starttime, $endtime])->sum("num");
+            $data['withdraw_usdt'] = $withdraw_usdt;
             $data['withdraw_rmb'] = $withdraw_rmb;
         }else{
             return false;
