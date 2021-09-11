@@ -121,7 +121,7 @@ class OrderCashout extends Backend
             $row->save($data);
 
             //TODO 处理余额退回
-            \app\admin\model\User::useaMoney($row['user_id'], $row['amount'],3);
+            \app\admin\model\User::useaMoney($row['user_id'], $row['num'],3);
 
             $msg = '审核失败退回!';
 
@@ -159,7 +159,7 @@ class OrderCashout extends Backend
                     $ret['code'] = 109;
                     $ret['msg'] = "禁止修改到此状态23-3";
                 }else{
-                    \app\admin\model\User::useaMoney($row['user_id'], $row['amount'],3);
+                    \app\admin\model\User::useaMoney($row['user_id'], $row['num'],3);
                     $ret['continue'] = true;
                 }
                 break;
