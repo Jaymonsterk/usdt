@@ -43,6 +43,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'username', title: __('Username'), operate: 'LIKE'},
                         {field: 'reg_num', title: __('Reg_num')},
                         {field: 'recharge_usdt', title: __('Recharge_usdt'), operate:'BETWEEN'},
+                        {field: 'withdraw_usdt', title: __('卖U数量'), operate:'BETWEEN'},
                         {field: 'withdraw_rmb', title: __('Withdraw_rmb'), operate:'BETWEEN'},
                         // {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
                         // {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
