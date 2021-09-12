@@ -85,7 +85,7 @@ class Userbank extends Api
 		$name = input("name");
 		$bank_name = input("bank_name");
 		$card = input("card");
-		$status = input("status",0);
+		$status = input("status/d",0);
 		$bank_branch = input("bank_branch");
 		$note = input("note");
 		$time = time();
