@@ -293,4 +293,42 @@ class Usdt extends Api
             $this->error(__('验证码不正确'));
         }
     }
+
+    //新订单已打款提醒
+    public function order_notice()
+    {
+        $user = $this->auth->getUserinfo();
+        $data = Db::name('order_cashout')->field('id,username,is_read')
+            ->where('status','<>',1)
+            ->where('is_read',0)
+            ->where('user_id',$user['id'])
+            ->select();
+        $msg = "你有新消息";
+        if(empty($data)){
+            $msg = "无新消息";
+            $data = [];
+        }
+
+        $this->success(__($msg),$data);
+    }
+
+    //通知已读 默认未读，status，1=已读，0=未读
+    public function notice_read()
+    {
+        $status = $this->request->port("status");
+        if($status){
+            $user = $this->auth->getUserinfo();
+            $data = [
+                "is_read"=>1,
+            ];
+            $data = Db::name('order_cashout')->field('id,username,is_read')
+                ->where('status','<>',1)
+                ->where('is_read',0)
+                ->where('user_id',$user['id'])
+                ->update($data);
+            $this->success(__('已读成功'),[]);
+        }else{
+            $this->error(__('Error'));
+        }
+    }
 }

@@ -63,8 +63,8 @@ class Usdt
 	public function getLatestPrice()
 	{
 		//汇率
-        $usdt_price = 6.3;
-        $inc_price = 6.39;
+        $usdt_price = 6.43;
+        $inc_price = 6.43;
         $is_real_price = BaseConfig::getInstance()->getBaseConfig('is_real_price');
         $is_real_price = 1;
         if($is_real_price){

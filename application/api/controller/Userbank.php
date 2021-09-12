@@ -142,5 +142,27 @@ class Userbank extends Api
 		$this->success(__('成功'),$data);
 	}
 
+	//删除单条记录
+	public function delete()
+	{
+		$id = input("id/d");
+		if(!$id){
+			$this->error(__('ID为空'));
+		}
+		$data = [];
+		$user = $this->auth->getUser();
+		$uid = $user['id'];
+		$uname = $user['username'];
+
+		$data = Db::name('user_bank_card')->where('id','=',$id)->where('uid','=',$uid)->find();
+		if (!$data) {
+			$this->error(__('银行卡不存在'));
+		}else{
+            Db::name('user_bank_card')->where('id','=',$id)->where('uid','=',$uid)->delete();
+        }
+
+		$this->success(__('删除成功'),$id);
+	}
+
 }
 
