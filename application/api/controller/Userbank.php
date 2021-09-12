@@ -69,7 +69,7 @@ class Userbank extends Api
 			'name' => 'require|chsAlphaNum',
 			'bank_name' => 'require|chsAlphaNum',
 			'card' => 'require|number',
-			'status' => 'number',
+			//'status' => 'number',
 			'bank_branch' => 'chsAlphaNum',
 			'note' => 'chsAlphaNum',
 		]);
@@ -85,7 +85,7 @@ class Userbank extends Api
 		$name = input("name");
 		$bank_name = input("bank_name");
 		$card = input("card");
-		$status = input("status");
+		$status = input("status",0);
 		$bank_branch = input("bank_branch");
 		$note = input("note");
 		$time = time();
