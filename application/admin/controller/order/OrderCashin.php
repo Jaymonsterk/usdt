@@ -71,8 +71,7 @@ class OrderCashin extends Backend
             $cashout = Db::name('order_cashout')->field('id,username,is_read')
                 ->where('status',1)
                 ->count("id");
-
-            $result = array("total" => $list->total(), "rows" => $rows,"cashin"=>$cashin,"cashout"=>$cashout);
+            $result = array("total" => $list->total(), "rows" => $rows,"cashin"=>$cashin,"cashout"=>$cashout,"order"=>(int)$cashin+(int)$cashout);
 
             return json($result);
         }

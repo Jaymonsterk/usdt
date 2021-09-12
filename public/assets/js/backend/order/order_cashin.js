@@ -91,7 +91,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     // 如果需要在进入后台即显示左侧的彩色小角标,请使用服务端渲染方式,详情修改application/admin/controller/Index.php
                     Backend.api.sidebar({
                         'order/order_cashin': data.cashin,
-                        'order/order_cashout': data.cashout
+                        'order/order_cashout': data.cashout,
+                        'order': data.order
                     });
                 }
             });

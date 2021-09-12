@@ -5,6 +5,7 @@ namespace app\admin\controller;
 use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use think\Config;
+use think\Db;
 use think\Hook;
 use think\Validate;
 
@@ -32,11 +33,20 @@ class Index extends Backend
     public function index()
     {
         //左侧菜单
+        $cashin = Db::name('order_cashin')->field('id,username,is_read')
+            ->where('status',0)
+            ->count("id");
+        $cashout = Db::name('order_cashout')->field('id,username,is_read')
+            ->where('status',1)
+            ->count("id");
         list($menulist, $navlist, $fixedmenu, $referermenu) = $this->auth->getSidebar([
             'dashboard' => 'hot',
             'addon'     => ['new', 'red', 'badge'],
             'auth/rule' => __('Menu'),
             'general'   => ['new', 'purple'],
+            'order'   => (int)$cashin+(int)$cashout,
+            'order/order_cashin'   => (int)$cashin,
+            'order/order_cashout'   => (int)$cashout,
         ], $this->view->site['fixedpage']);
         $action = $this->request->request('action');
         if ($this->request->isPost()) {
