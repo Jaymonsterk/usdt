@@ -136,6 +136,7 @@ class Common extends Api
         $data = [
             "kefu"=>config("site.kefu"),
             "notice"=> $notice,
+            "site_name"=> config("site.name"),
         ];
         $this->success("Success",$data);
     }

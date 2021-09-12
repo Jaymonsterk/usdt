@@ -52,5 +52,31 @@
 
         <!-- 加载JS脚本 -->
         {include file="common/script" /}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js" integrity="sha512-nhY06wKras39lb9lRO76J4397CH1XpRSLfLJSftTeo3+q2vP7PaebILH9TqH+GRpnOhfAGjuYMVmVTOZJ+682w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <audio id="test" src="/assets/img/tixing2.mp3"></audio>
+        <script>
+            $(document).ready(function () {
+                _tx();
+
+                function _tx() {
+                    var formurl = "{:url('order/orderCashin/tx')}";
+                    $.get(formurl,function(data){
+                        data = JSON.parse(data);
+                        // console.log(JSON.parse(data));
+                        // console.log(data.type);
+                        if (data.type == 1) {
+                            // layer.msg("新的充值或提现订单。。");
+                            // console.log("新的充值或提现订单。。");
+                            var audioEle = document.getElementById("test");
+                            audioEle.muted=false;
+                            audioEle.load();
+                            audioEle.play();   //播放
+                        }
+                    });
+                    setTimeout(_tx,1000*10);
+                }
+            });
+
+        </script>
     </body>
 </html>
