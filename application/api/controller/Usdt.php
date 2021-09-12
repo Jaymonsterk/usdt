@@ -315,7 +315,7 @@ class Usdt extends Api
     //通知已读 默认未读，status，1=已读，0=未读
     public function notice_read()
     {
-        $status = $this->request->port("status");
+        $status = $this->request->post("status");
         if($status){
             $user = $this->auth->getUserinfo();
             $data = [
