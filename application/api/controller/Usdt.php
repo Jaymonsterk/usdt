@@ -303,7 +303,7 @@ class Usdt extends Api
             ->where('is_read',0)
             ->where('user_id',$user['id'])
             ->select();
-        $msg = "你有新消息";
+        $msg = "你的新的订单状态变化，请注意查收！";
         if(empty($data)){
             $msg = "无新消息";
             $data = [];
