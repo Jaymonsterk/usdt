@@ -98,7 +98,7 @@ class Usdt
 	//获取卖币订单列表
 	public function getSellOrderList($where,$page_rows="20")
 	{
-		$data = Db::name('order_cashout')->field('id,user_id,username,num,rate,type,status,note,createtime,opertime')
+		$data = Db::name('order_cashout')->field('id,user_id,username,num,rate,amount,type,status,note,createtime,opertime')
 			->where($where)
 			->order('createtime desc')
 			->paginate($page_rows,false,[
