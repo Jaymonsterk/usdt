@@ -26,6 +26,7 @@ class OrderCashin extends Model
 
     // 追加属性
     protected $append = [
+        'is_sound_text',
         'status_text',
         'opertime_text'
     ];
@@ -52,10 +53,22 @@ class OrderCashin extends Model
         });
     }
 
+    public function getIsSoundList()
+    {
+        return ['1' => __('Is_sound 1'), '0' => __('Is_sound 0')];
+    }
     
     public function getStatusList()
     {
         return ['0' => __('Status 0'), '1' => __('Status 1'), '2' => __('Status 2')];
+    }
+
+
+    public function getIsSoundTextAttr($value, $data)
+    {
+        $value = $value ? $value : (isset($data['is_sound']) ? $data['is_sound'] : '');
+        $list = $this->getIsSoundList();
+        return isset($list[$value]) ? $list[$value] : '';
     }
 
 

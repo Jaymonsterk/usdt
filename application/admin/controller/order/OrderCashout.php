@@ -27,6 +27,7 @@ class OrderCashout extends Backend
         $this->model = new \app\admin\model\order\OrderCashout;
         $this->view->assign("typeList", $this->model->getTypeList());
         $this->view->assign("statusList", $this->model->getStatusList());
+        $this->view->assign("isSoundList", $this->model->getIsSoundList());
     }
 
     public function import()

@@ -25,6 +25,7 @@ class OrderCashin extends Backend
     {
         parent::_initialize();
         $this->model = new \app\admin\model\order\OrderCashin;
+        $this->view->assign("isSoundList", $this->model->getIsSoundList());
         $this->view->assign("statusList", $this->model->getStatusList());
     }
 
@@ -213,9 +214,11 @@ class OrderCashin extends Backend
         ];
         $cashin = Db::name('order_cashin')->field('id,username,is_read')
             ->where('status',0)
+            ->where('is_sound',0)
             ->count("id");
         $cashout = Db::name('order_cashout')->field('id,username,is_read')
             ->where('status',1)
+            ->where('is_sound',0)
             ->count("id");
         $total = $cashin+$cashout;
         if($total){

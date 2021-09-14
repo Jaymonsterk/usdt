@@ -27,6 +27,7 @@ class OrderCashout extends Model
     protected $append = [
         'type_text',
         'status_text',
+        'is_sound_text',
         'opertime_text'
     ];
 
@@ -63,6 +64,11 @@ class OrderCashout extends Model
         return ['1' => __('Status 1'), '2' => __('Status 2'), '3' => __('Status 3')];
     }
 
+    public function getIsSoundList()
+    {
+        return ['1' => __('Is_sound 1'), '0' => __('Is_sound 0')];
+    }
+
 
     public function getTypeTextAttr($value, $data)
     {
@@ -76,6 +82,14 @@ class OrderCashout extends Model
     {
         $value = $value ? $value : (isset($data['status']) ? $data['status'] : '');
         $list = $this->getStatusList();
+        return isset($list[$value]) ? $list[$value] : '';
+    }
+
+
+    public function getIsSoundTextAttr($value, $data)
+    {
+        $value = $value ? $value : (isset($data['is_sound']) ? $data['is_sound'] : '');
+        $list = $this->getIsSoundList();
         return isset($list[$value]) ? $list[$value] : '';
     }
 
