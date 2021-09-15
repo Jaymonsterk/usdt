@@ -137,8 +137,11 @@ class User extends Api
             $this->error(__('请输入邀请码'));
         }
 
-        if (!$username || !$password) {
-            $this->error(__('Invalid parameters'));
+        if (!$username || !Validate::regex($username, "^[\w\d]{5,16}$")) {
+            $this->error(__('请输入5到16位字母、数字用户名'));
+        }
+        if (!$password || !Validate::regex($password, "[\w-]{6,16}")) {
+            $this->error(__('密码长度为6到16个字符'));
         }
         if ($email && !Validate::is($email, "email")) {
             $this->error(__('Email is incorrect'));
