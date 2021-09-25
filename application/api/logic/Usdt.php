@@ -69,14 +69,18 @@ class Usdt
         if($is_real_price){
             //实时价格从接口取 非小号接口
             $url = "https://dncapi.bqrank.net/api/coin/web-rate?webp=1";
+            $url = "https://dncapi.bqrank.net/api/home/global?webp=1";
             $tmp_data = Http::get($url);
             $lastest_price_arr = json_decode($tmp_data,true);
             if(isset($lastest_price_arr['data'])){
-                foreach ($lastest_price_arr['data'] as $row){
+                //场外价格
+                $usdt_price = $lastest_price_arr['data']['usdt_price_cny']??$usdt_price;
+                //usdt汇率
+                /*foreach ($lastest_price_arr['data'] as $row){
                     if(isset($row['cny'])){
                         $usdt_price = sprintf("%4f",$row['cny']);
                     }
-                }
+                }*/
             }
         }else {
             //固定价格
